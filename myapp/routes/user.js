@@ -12,8 +12,21 @@ var connection = mysql.createConnection({
 connection.connect();
 
 router.all("/",(req, res, next) => {
+    let promise = new Promise((resolve,reject) => {
+        connection.query("select * from user",[],(error,result) => {
+            if(error){
+                reject(error);
+            }
+            resolve(result);
+        });
+    });
 
-    res.render('user/index', { title: 'User' });
+    promise.then(result => {
+        res.render('user/index', { title: '用户列表', data: result});
+    }).catch(error => {
+        res.send(error);
+    });
+
 });
 
 router.all("/login",(req, res, next) => {
@@ -23,12 +36,12 @@ router.all("/login",(req, res, next) => {
 
         if(!username){
             let message = '请输入用户名';
-            res.redirect(`/failure?message=${message}`);
+            return res.redirect(`/failure?message=${message}`);
         }
 
         if(!password){
             let message = '请输入用户密码';
-            res.redirect(`/failure?message=${message}`);
+            return res.redirect(`/failure?message=${message}`);
         }
 
         let params = [
@@ -49,10 +62,10 @@ router.all("/login",(req, res, next) => {
                 req.session.user = result[0];
                 let message = '用户登录成功';
                 let url = '/';
-                res.redirect(`/success?message=${message}&url=${url}`);
+                return res.redirect(`/success?message=${message}&url=${url}`);
             }else {
                 let message = '用户登录失败';
-                res.redirect(`/success?message=${message}`);
+                return res.redirect(`/success?message=${message}`);
             }
         }).catch(error => {
             res.send(error);
@@ -71,12 +84,12 @@ router.all("/register",(req, res, next) => {
 
         if(!username){
             let message = '请输入用户名';
-            res.redirect(`/failure?message=${message}`);
+            return res.redirect(`/failure?message=${message}`);
         }
 
         if(!password){
             let message = '请输入用户密码';
-            res.redirect(`/failure?message=${message}`);
+            return res.redirect(`/failure?message=${message}`);
         }
 
         let params = [
@@ -101,10 +114,10 @@ router.all("/register",(req, res, next) => {
                 };
                 let message = '用户注册成功';
                 let url = '/';
-                res.redirect(`/success?message=${message}&url=${url}`);
+                return res.redirect(`/success?message=${message}&url=${url}`);
             }else {
                 let message = '用户注册失败';
-                res.redirect(`/success?message=${message}`);
+                return res.redirect(`/success?message=${message}`);
             }
         }).catch(error => {
             res.send(error);

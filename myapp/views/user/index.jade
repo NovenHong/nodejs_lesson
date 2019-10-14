@@ -1,5 +1,15 @@
 extends ../layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  table
+    thead
+      tr
+        th id
+        th 用户名
+        th 用户密码
+    tbody
+      each item in data
+        tr
+          td= item.id
+          td= item.username
+          td= item.password

@@ -26,24 +26,27 @@ app.use(session({
 }));
 
 //login interceptor
-app.all('/*', function(req, res, next){
+app.use(function (req, res, next) {
   if(req.session.user){
-    //check permission
-    next();
+    return next();
   }
+
   let permit = ['/user/login','/user/register','/failure'];
   let req_url = req.url.split('?')[0];
 
+  let isPermit = false;
   permit.forEach((value,key) => {
     if(req_url == value){
-      next();
+      return isPermit = true;
     }
   });
-
+  if(isPermit){
+    return next();
+  }
+  //console.info("========ok========");
   let message = '请先登录';
   let url = '/user/login';
-  res.redirect(`/failure?message=${message}&url=${url}`);
-
+  return res.redirect(`/failure?message=${message}&url=${url}`);
 });
 
 app.use('/', indexRouter);
