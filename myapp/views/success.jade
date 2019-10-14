@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  h2 #{message}
+  h4(style={"letter-spacing":"2px"})
+    span.timeout 3
+    | 秒后跳转...
+  script(type='text/javascript').
+    var timeout = $(".timeout").text();
+    var timer = setInterval(function () {
+      timeout--;
+      $(".timeout").text(timeout);
+      if (timeout == 0) {
+        clearInterval(timer);
+         if('#{url ? url : null}'){
+           location.href = "#{url}";
+         } else {
+           history.back(-1);
+         }
+      }
+    },1000);

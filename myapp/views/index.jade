@@ -1,0 +1,7 @@
+extends layout
+
+block content
+  if user
+    p welcome #{user.username}
+  else
+    p 请先登录！

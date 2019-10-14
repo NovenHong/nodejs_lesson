@@ -1,0 +1,11 @@
+extends ../layout
+
+block content
+  form(action="/user/login",method="post")
+    | 用户名：
+    input(type="text",name="username")
+    div(style={width: '100%', height: '10px', clear: 'both'})
+    | 用户密码：
+    input(type="password",name="password")
+    div(style={width: '100%', height: '10px', clear: 'both'})
+    input(type="submit",value="提交")
