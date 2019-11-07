@@ -1,0 +1,37 @@
+<mat-sidenav-container class="sidenav-container" autosize>
+  <mat-sidenav #sidenav mode="side" class="sidenav" opened>
+    <div class="logo">
+      <a href="" class="logo-img"></a>
+    </div>
+    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+      <mat-tree-node *matTreeNodeDef="let node" class="tree-node">
+        <button mat-flat-button class="tree-node-button"
+                [ngClass]="{'active':node.isActive}" (click)="toggleActive(node)" [routerLink]="[node.url]">
+          <mat-icon aria-hidden="false" [attr.aria-label]="node.icon | uppercase" class="tree-node-icon">{{node.icon}}</mat-icon>
+          <span class="tree-node-text">{{node.name}}</span>
+        </button>
+      </mat-tree-node>
+      <mat-tree-node *matTreeNodeDef="let node;when: hasChild" class="tree-node">
+        <button mat-icon-button disabled class="tree-node-button2"></button>
+        <mat-icon aria-hidden="false" [attr.aria-label]="node.icon | uppercase" class="tree-node-icon">{{node.icon}}</mat-icon>
+        <span class="tree-node-text">{{node.name}}</span>
+        <button mat-icon-button matTreeNodeToggle class="tree-node-toggle"
+                [attr.aria-label]="'toggle ' + node.name">
+          <mat-icon class="mat-icon-rtl-mirror">
+            {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+          </mat-icon>
+        </button>
+      </mat-tree-node>
+    </mat-tree>
+  </mat-sidenav>
+  <mat-sidenav-content class="sidenav-content">
+    <mat-toolbar color="primary">
+      <button mat-icon-button (click)="sidenav.toggle()" aria-label="Menu">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </mat-toolbar>
+    <div class="container">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

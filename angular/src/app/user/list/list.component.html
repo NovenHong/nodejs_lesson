@@ -1,0 +1,68 @@
+<mat-card class="card">
+  <mat-card-header>
+    <mat-card-title class="container-title">用户列表</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-toolbar class="toolbar">
+      <mat-form-field>
+        <input matInput type="text" placeholder="请输入用户名" [(ngModel)]="username" (input)="onSearch()"/>
+        <button mat-button *ngIf="username" matSuffix mat-icon-button aria-label="Clear" (click)="username='';onSearch()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </mat-toolbar>
+    <mat-table [dataSource]="dataSource" matSort>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+      <ng-container matColumnDef="check">
+        <mat-header-cell *matHeaderCellDef>
+          <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()">
+          </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <mat-checkbox (click)="$event.stopPropagation()"
+                        (change)="$event ? selection.toggle(row) : null"
+                        [checked]="selection.isSelected(row)">
+          </mat-checkbox>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef>ID</mat-header-cell>
+        <mat-cell *matCellDef="let item">{{item.id}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="username">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>用户名</mat-header-cell>
+        <mat-cell *matCellDef="let item">{{item.username}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="password">
+        <mat-header-cell *matHeaderCellDef>用户密码</mat-header-cell>
+        <mat-cell *matCellDef="let item">{{item.password}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <mat-header-cell *matHeaderCellDef class="action-header-cell">操作</mat-header-cell>
+        <mat-cell *matCellDef="let item" class="action-cell">
+          <button mat-icon-button color="accent" aria-label="Close" (click)="onDelete(item)">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="footer-toolbar">
+        <mat-footer-cell *matFooterCellDef colspan="2">
+          <button mat-flat-button color="accent" (click)="onMultiDelete()">删除</button>
+        </mat-footer-cell>
+      </ng-container>
+
+      <mat-footer-row *matFooterRowDef="['footer-toolbar']"></mat-footer-row>
+    </mat-table>
+  </mat-card-content>
+  <mat-card-actions>
+  </mat-card-actions>
+</mat-card>

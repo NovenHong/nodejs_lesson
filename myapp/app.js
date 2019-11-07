@@ -25,17 +25,30 @@ app.use(session({
   saveUninitialized: true
 }));
 
+//add cors
+app.all('*', (req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild");
+  res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+  res.header("Content-Type", "application/json;charset=utf-8");
+  next();
+});
+
 //login interceptor
 app.use(function (req, res, next) {
   if(req.session.user){
     return next();
   }
 
-  let permit = ['/user/login','/user/register','/failure'];
+  let permit = ['/user/login','/user/register','/failure','/','/*'];
   let req_url = req.url.split('?')[0];
 
   let isPermit = false;
   permit.forEach((value,key) => {
+    let reg = new RegExp(value.replace("*",".*"),'ig');
+    if(reg.test(value)){
+      return isPermit = true;
+    }
     if(req_url == value){
       return isPermit = true;
     }

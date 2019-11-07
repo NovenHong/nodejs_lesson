@@ -1,0 +1,42 @@
+<mat-card class="card">
+  <mat-card-header>
+    <mat-card-title class="container-title">用户添加</mat-card-title>
+  </mat-card-header>
+  <form [formGroup]="addUserFormGroup" (ngSubmit)="onSubmit()">
+  <mat-card-content>
+    <div class="b10"></div>
+    <mat-form-field class="form-field">
+      <input matInput type="text" placeholder="用户名称" name="username" [formControl]="addUserFormGroup.controls['username']"/>
+      <mat-error *ngIf="addUserFormGroup.controls['username'].hasError('required') && !addUserFormGroup.controls['username'].hasError('username')">
+        <mat-icon>error</mat-icon>请输入用户名称
+      </mat-error>
+      <mat-error *ngIf="addUserFormGroup.controls['username'].hasError('username')">
+        <mat-icon>error</mat-icon>请输入正确的用户名称
+      </mat-error>
+      <mat-error *ngIf="addUserFormGroup.controls['username'].hasError('exist')">
+        <mat-icon>error</mat-icon>用户名称已经重复
+      </mat-error>
+    </mat-form-field>
+    <div class="b10"></div>
+    <mat-form-field class="form-field">
+      <input matInput type="password" placeholder="用户密码" name="password" [formControl]="addUserFormGroup.controls['password']"/>
+      <mat-error *ngIf="addUserFormGroup.controls['password'].hasError('required') && !addUserFormGroup.controls['password'].hasError('minlength')">
+        <mat-icon>error</mat-icon>请输入用户密码
+      </mat-error>
+      <mat-error *ngIf="addUserFormGroup.controls['password'].hasError('minlength')">
+        <mat-icon>error</mat-icon>用户密码不能小于6位
+      </mat-error>
+    </mat-form-field>
+    <div class="b10"></div>
+    <mat-form-field class="form-field">
+      <input matInput type="password" placeholder="重复用户密码" name="confirm_password" [formControl]="addUserFormGroup.controls['confirm_password']"/>
+      <mat-error *ngIf="addUserFormGroup.controls['confirm_password'].hasError('confirm')">
+        <mat-icon>error</mat-icon>两次密码不相同
+      </mat-error>
+    </mat-form-field>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-flat-button color="primary" [disabled]="!addUserFormGroup.valid">提交</button>
+  </mat-card-actions>
+  </form>
+</mat-card>

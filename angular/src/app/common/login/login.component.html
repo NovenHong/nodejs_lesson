@@ -1,0 +1,67 @@
+<div class="container">
+  <video id="background_video" loop muted="muted" autoplay="autoplay" meted="meted">
+    <source type="video/mp4" src="../../../assets/cloud.mp4"/>
+  </video>
+  <!--<form (ngSubmit)="onSubmit();userForm.reset()" #userForm="ngForm">
+    <div class="form-group">
+      <label for="username">Username：</label>
+      <input type="text" class="form-control" id="username" [(ngModel)]="username" name="username"
+             required exist minlength="4" username="^[a-zA-Z0-9_-]{4,16}$" #form_username="ngModel">
+      <p [hidden]="form_username.valid || form_username.pristine" *ngIf="form_username.invalid && (form_username.dirty || form_username.touched)">
+        <span *ngIf="form_username.errors.required">Username is required</span>
+        <span *ngIf="form_username.errors.minlength">Username must be at least 4 characters long</span>
+        <span *ngIf="form_username.errors.username">Username is error format</span>
+        <span *ngIf="form_username.errors.exist">Username is exist</span>
+      </p>
+    </div>
+    <div class="form-group">
+      <label for="password">Password：</label>
+      <input type="password" class="form-control" id="password" [(ngModel)]="password" name="password" required>
+    </div>
+    <button type="submit" [disabled]="!userForm.form.valid">Submit</button>
+  </form>-->
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>登录</mat-card-title>
+    </mat-card-header>
+    <div class="b10"></div>
+    <form [formGroup]="loginFormGroup" (ngSubmit)="onSubmit()">
+    <mat-card-content>
+      <mat-form-field class="form-field">
+        <mat-icon matPrefix class="form-field-prefix">person</mat-icon>
+        <input matInput type="text" placeholder="用户名称" name="username" [formControl]="loginFormGroup.controls['username']"/>
+        <button mat-button *ngIf="loginFormGroup.controls['username'].value" matSuffix mat-icon-button aria-label="Clear" (click)="loginFormGroup.controls['username'].setValue('')">
+          <mat-icon>close</mat-icon>
+        </button>
+        <mat-error *ngIf="loginFormGroup.controls['username'].hasError('required') && !loginFormGroup.controls['username'].hasError('username')">
+          <mat-icon>error</mat-icon>请输入用户名称
+        </mat-error>
+        <mat-error *ngIf="loginFormGroup.controls['username'].hasError('username')">
+          <mat-icon>error</mat-icon>请输入正确的用户名称
+        </mat-error>
+        <mat-error *ngIf="loginFormGroup.controls['username'].hasError('exist')">
+          <mat-icon>error</mat-icon>用户名称已经重复
+        </mat-error>
+      </mat-form-field>
+      <div class="b10"></div>
+      <mat-form-field class="form-field">
+        <mat-icon matPrefix class="form-field-prefix">verified_user</mat-icon>
+        <input matInput type="password" placeholder="用户密码" name="password" [formControl]="loginFormGroup.controls['password']"/>
+        <button mat-button *ngIf="loginFormGroup.controls['password'].value" matSuffix mat-icon-button aria-label="Clear" (click)="loginFormGroup.controls['password'].setValue('')">
+          <mat-icon>close</mat-icon>
+        </button>
+        <mat-error *ngIf="loginFormGroup.controls['password'].hasError('required') && !loginFormGroup.controls['password'].hasError('minlength')">
+          <mat-icon>error</mat-icon>请输入用户密码
+        </mat-error>
+        <mat-error *ngIf="loginFormGroup.controls['password'].hasError('minlength')">
+          <mat-icon>error</mat-icon>用户密码不能小于6位
+        </mat-error>
+      </mat-form-field>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-flat-button color="primary" [disabled]="!loginFormGroup.valid">提交</button>
+    </mat-card-actions>
+    </form>
+  </mat-card>
+</div>
+

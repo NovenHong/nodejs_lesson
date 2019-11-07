@@ -1,0 +1,46 @@
+@import "src/app/app.component";
+
+.sidenav-container {
+  width: 100%;
+  height: 100%;
+}
+.sidenav-content {
+  background-color: #fafafa;
+}
+.container {
+  padding: 15px;
+}
+.logo {
+  width: 100%;
+  height: 64px;
+  background-color: mat-color($accent);
+}
+.tree-node {
+  width: 160px;
+}
+.tree-node-button {
+  width: 100%;
+  height: 48px;
+  text-align: left;
+  padding-left: 25px;
+  border-left: 4px solid #fff;
+}
+.tree-node-button2 {
+  width: 29px;
+}
+.tree-node-button.active {
+  border-left: 4px solid mat-color($accent);
+  background-color: rgba(33,33,33,.1);
+}
+.tree-node-button:not(.active):hover {
+  border-left: 4px solid mat-color($primary);
+  background-color: rgba(33,33,33,.1);
+}
+.tree-node-icon {
+  vertical-align: center;
+}
+.tree-node-toggle {
+  position: absolute;
+  right: 5px;
+}
+
