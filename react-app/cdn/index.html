@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>React Test</title>
+
+    <link rel="shortcut icon" href="../public/favicon.ico">
+
+    <!-- 加载 React。-->
+    <!-- 注意: 部署时，将 "development.js" 替换为 "production.min.js"。-->
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+
+    <script src="https://unpkg.com/@material-ui/core@latest/umd/material-ui.development.js" crossorigin="anonymous"></script>
+    <!-- Fonts to support Material Design -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+    <!-- Icons to support Material Design -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+</html>
+<script type="text/babel">
+    const {
+        CssBaseline,
+        Button,
+        TextField,
+        makeStyles,
+        colors,
+        FormControl,
+        RadioGroup,
+        Radio,
+        FormControlLabel,
+        CircularProgress,
+        Dialog,
+        DialogTitle,
+        DialogContent,
+        Icon,
+        Paper,
+        Fade,
+        Typography
+    } = MaterialUI;
+
+    const useStyles = makeStyles(theme => ({
+        RedButton: {
+            background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+            border: 0,
+            borderRadius: 3,
+            boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+            color: 'white',
+            height: 48,
+            padding: '0 30px',
+            margin: `${theme.spacing(2)}px 0`
+        },
+        Margin: {
+            margin: `${theme.spacing(2)}px 0`
+        }
+    }));
+
+    const loadingButtonStyles = makeStyles(theme => ({
+        wrapper: {
+            margin: theme.spacing(1),
+            position: 'relative',
+            width: '160px'
+        },
+        buttonProgress: {
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            marginTop: -12,
+            marginLeft: -12,
+        },
+        button: {
+            width: '100%'
+        }
+    }));
+
+    const loadingDialogStyles = makeStyles(theme => ({
+        root : {
+            '& .MuiPaper-root' : {
+                overflow: 'hidden',
+                background: 'rgba(255,255,255,0)',
+                boxShadow: 'none'
+            },
+            '& .MuiDialogContent-root' : {
+                textAlign: 'center'
+            },
+            '& .MuiBackdrop-root' : {
+                background: 'rgba(0,0,0,0)',
+            }
+        }
+    }));
+
+    const fadeStyles = makeStyles(theme => ({
+        paper : {
+            width : 100,
+            height: 100,
+            margin: theme.spacing(1,0)
+        }
+    }));
+    
+    function MyTextField(props) {
+        return (
+            <TextField label="Custom CSS" name="mytextfield" onChange={props.onChange}/>
+        );
+    }
+
+    function MyButton() {
+        const classes = useStyles();
+        return (
+            <Button variant="contained" className={classes.RedButton}>
+                Hello World
+            </Button>
+        );
+    }
+
+    function MyLoadingButton() {
+        const classes = loadingButtonStyles();
+        const [loading,setLoading] = React.useState(false);
+        const timer = React.useRef();
+
+        React.useEffect(() => {
+            return () => {
+                clearTimeout(timer.current);
+            };
+        },[]);
+
+        const handleClick = () => {
+            if(!loading){
+                setLoading(true);
+                timer.current = setTimeout(() => {
+                    setLoading(false);
+                }, 2000);
+            }
+        };
+        return (
+            <div className={classes.wrapper}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    disabled={loading}
+                    className={classes.button}
+                    onClick={handleClick}
+                >
+                    Loading Button
+                </Button>
+                {loading && <CircularProgress size={24} className={classes.buttonProgress}/>}
+            </div>
+        );
+    }
+    
+    function MyDialog() {
+        const classes = loadingDialogStyles();
+        const [open, setOpen] = React.useState(false);
+        const handleClickOpen = () => {
+            setOpen(true);
+        };
+        const handleClose = () => {
+            setOpen(false);
+        };
+
+        return (
+            <div>
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleClickOpen}
+                >
+                    Open Dialog
+                </Button>
+                <Dialog
+                    className={classes.root}
+                    open={open}
+                    onClose={handleClose}
+                >
+                    <DialogTitle>正在加载</DialogTitle>
+                    <DialogContent>
+                        <CircularProgress size={50}/>
+                    </DialogContent>
+                </Dialog>
+            </div>
+        );
+    }
+
+    function MyFadeInOut() {
+        const classes = fadeStyles();
+        const [flag, setFlag] = React.useState(true);
+        const timer = React.useRef();
+
+        React.useEffect(() => {
+            return () => {
+                clearTimeout(timer.current);
+            };
+        },[]);
+
+        const handleClick = () => {
+            setFlag(prev => !prev);
+            timer.current = setTimeout(() => {
+                setFlag(prev => !prev);
+            }, 1000);
+        };
+
+        return (
+            <Fade in={flag} timeout={500}>
+                <Paper elevation={2} className={classes.paper} onClick={handleClick} style={{background:'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)'}}>
+                </Paper>
+            </Fade>
+        );
+    }
+
+    class App extends React.Component {
+        constructor(props){
+            super(props);
+            this.state = {value:''};
+            this.handleSubmit = this.handleSubmit.bind(this);
+            this.handleChange = this.handleChange.bind(this);
+        }
+
+        handleSubmit(event){
+            alert(this.state.value);
+            event.preventDefault();
+        }
+
+        handleChange(event){
+            this.setState({value: event.target.value});
+        }
+
+        handleRadioChange(event){
+            console.info(event.target.value);
+        }
+
+        render(){
+            const users = [{'id':1,'username':'jingjing'},{'id':2,'username':'nana123'}];
+            const listItems = users.map((item) => {
+                return <li key={item.id}>{item.username}</li>;
+            });
+
+            return (
+                <React.Fragment>
+                    <CssBaseline />
+                    <form onSubmit={this.handleSubmit}>
+                        <label>
+                            name:
+                            <input type="text" value={this.state.value} onChange={this.handleChange}/>
+                        </label>
+                        <input type="submit" value="Submit"/>
+                    </form>
+                    <ul>{listItems}</ul>
+                    <Button variant="contained" color="primary" style={{margin:'5px 0'}}>
+                        Hello World
+                    </Button>
+                    <br/>
+                    <Button variant="contained" color="secondary" style={{margin:'5px 0'}}>
+                        Hello World
+                    </Button>
+                    <br/>
+                    <MyButton/>
+                    <br/>
+                    <MyTextField onChange={this.handleChange}/>
+                    <br/>
+                    <FormControl component="fieldset">
+                        <RadioGroup aria-label="gender" name="gender" onChange={this.handleRadioChange} row>
+                            <FormControlLabel value="female" control={<Radio />} label="Female" />
+                            <FormControlLabel value="male" control={<Radio />} label="Male" />
+                        </RadioGroup>
+                    </FormControl>
+                    <br/>
+                    <MyLoadingButton/>
+                    <br/>
+                    <MyDialog/>
+                    <br/>
+                    <Icon color="secondary">add_circle</Icon>
+                    <Icon color="secondary">delete_outline</Icon>
+                    <Icon color="secondary">mode_edit</Icon>
+                    <br/>
+                    <MyFadeInOut/>
+                    <br/>
+                    <Typography component="legend">Legend</Typography>
+                    <Typography variant="subtitle1" gutterBottom>
+                        subtitle1. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                        body1. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur
+                        unde suscipit, quam beatae rerum inventore consectetur, neque doloribus, cupiditate numquam
+                        dignissimos laborum fugiat deleniti? Eum quasi quidem quibusdam.
+                    </Typography>
+                </React.Fragment>
+            );
+        }
+    }
+
+    ReactDOM.render(
+        <App />,
+        document.getElementById('root')
+    );
+</script>
