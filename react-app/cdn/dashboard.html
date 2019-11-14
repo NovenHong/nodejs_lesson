@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>React 控制台</title>
+
+    <link rel="shortcut icon" href="../public/favicon.ico">
+
+    <!-- 加载 React。-->
+    <!-- 注意: 部署时，将 "development.js" 替换为 "production.min.js"。-->
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+
+    <script src="https://unpkg.com/@material-ui/core@latest/umd/material-ui.development.js" crossorigin="anonymous"></script>
+    <!-- Fonts to support Material Design -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+    <!-- Icons to support Material Design -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+
+    <!-- ApexCharts Support -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+</body>
+</html>
+<script type="text/babel">
+    const {
+        CssBaseline,
+        AppBar,
+        Toolbar,
+        IconButton,
+        Icon,
+        Typography,
+        Badge,
+        Drawer,
+        Divider,
+        List,
+        ListItem,
+        ListItemIcon,
+        ListItemText,
+        makeStyles,
+        Container,
+        Grid,
+        Paper
+    } = MaterialUI;
+
+    function toVal(mix) {
+        var k, y, str='';
+        if (mix) {
+            if (typeof mix === 'object') {
+                if (!!mix.push) {
+                    for (k=0; k < mix.length; k++) {
+                        if (mix[k] && (y = toVal(mix[k]))) {
+                            str && (str += ' ');
+                            str += y;
+                        }
+                    }
+                } else {
+                    for (k in mix) {
+                        if (mix[k] && (y = toVal(k))) {
+                            str && (str += ' ');
+                            str += y;
+                        }
+                    }
+                }
+            } else if (typeof mix !== 'boolean' && !mix.call) {
+                str && (str += ' ');
+                str += mix;
+            }
+        }
+        return str;
+    }
+
+    function clsx () {
+        var i=0, x, str='';
+        while (i < arguments.length) {
+            if (x = toVal(arguments[i++])) {
+                str && (str += ' ');
+                str += x;
+            }
+        }
+        return str;
+    }
+
+    const drawerWidth = 240;
+
+    const useStyles = makeStyles(theme => ({
+        root: {
+            display: 'flex',
+        },
+        appBar: {
+            zIndex: theme.zIndex.drawer + 1,
+            transition: theme.transitions.create(['width', 'margin'], {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.leavingScreen,
+            }),
+        },
+        appBarShift: {
+            marginLeft: drawerWidth,
+            width: `calc(100% - ${drawerWidth}px)`,
+            transition: theme.transitions.create(['width', 'margin'], {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.enteringScreen,
+            }),
+        },
+        toolbar: {
+            paddingRight: 24, // keep right padding when drawer closed
+        },
+        menuButton: {
+            marginRight: 36,
+        },
+        menuButtonHidden: {
+            display: 'none',
+        },
+        title: {
+            flexGrow: 1,
+        },
+        drawerPaper: {
+            position: 'relative',
+            whiteSpace: 'nowrap',
+            width: drawerWidth,
+            transition: theme.transitions.create('width', {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.enteringScreen,
+            }),
+        },
+        drawerPaperClose: {
+            overflowX: 'hidden',
+            transition: theme.transitions.create('width', {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.leavingScreen,
+            }),
+            width: theme.spacing(7),
+            [theme.breakpoints.up('sm')]: {
+                width: theme.spacing(9),
+            },
+        },
+        paper: {
+            padding: theme.spacing(2),
+            display: 'flex',
+            overflow: 'auto',
+            flexDirection: 'column',
+        },
+        toolbarIcon: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            padding: '0 8px',
+            ...theme.mixins.toolbar,
+        },
+        content: {
+            flexGrow: 1,
+            height: '100vh',
+            overflow: 'auto',
+        },
+        appBarSpacer : theme.mixins.toolbar,
+        container: {
+            paddingTop: theme.spacing(4),
+            paddingBottom: theme.spacing(4),
+        },
+    }));
+
+    var options = {
+        chart: {
+            height: 350,
+            type: 'line',
+            toolbar: {
+                show: false
+            }
+        },
+        //colors: ['#77B6EA', '#545454'],
+        dataLabels: {
+            enabled: true,
+        },
+        stroke: {
+            curve: 'smooth'
+        },
+        series: [
+            {
+                name: "High - 2013",
+                data: [28, 29, 33, 36, 32, 32, 33]
+            },
+            {
+                name: "Low - 2013",
+                data: [12, 11, 14, 18, 17, 13, 13]
+            }
+        ],
+        title: {
+            text: 'Average High & Low Temperature',
+            align: 'left'
+        },
+        grid: {
+            borderColor: '#e7e7e7',
+            row: {
+                colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                opacity: 0.5
+            },
+        },
+        markers: {
+            size: 6
+        },
+        xaxis: {
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+        },
+        yaxis: {},
+        legend: {
+            position: 'top',
+            horizontalAlign: 'right',
+            floating: true,
+            offsetY: -25
+        }
+    };
+
+    function App() {
+        const classes = useStyles();
+        const [open, setOpen] = React.useState(true);
+        let chartsEl;
+
+        const handleDrawerOpen = () => {
+            setOpen(true);
+        };
+        const handleDrawerClose = () => {
+            setOpen(false);
+        };
+
+        React.useEffect(() => {
+
+            new ApexCharts(chartsEl,options).render();
+
+            return () => {
+                //clear
+            };
+        },[]);
+
+        return (
+            <div className={classes.root}>
+                <CssBaseline />
+                <AppBar position="absolute" className={clsx(classes.appBar,open && classes.appBarShift)}>
+                    <Toolbar className={classes.toolbar}>
+                        <IconButton
+                            edge="start"
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={handleDrawerOpen}
+                            className={clsx(classes.menuButton,open && classes.menuButtonHidden)}
+                        >
+                            <Icon>menu</Icon>
+                        </IconButton>
+                        <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+                            Dashboard
+                        </Typography>
+                        <IconButton color="inherit">
+                            <Badge badgeContent={4} color="secondary">
+                                <Icon>notifications</Icon>
+                            </Badge>
+                        </IconButton>
+                    </Toolbar>
+                </AppBar>
+                <Drawer
+                    variant="permanent"
+                    open={open}
+                    classes={{
+                        paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+                    }}
+                >
+                    <div className={classes.toolbarIcon}>
+                        <IconButton onClick={handleDrawerClose}>
+                            <Icon>chevron_left</Icon>
+                        </IconButton>
+                    </div>
+                    <Divider />
+                    <List>
+                        <ListItem button>
+                            <ListItemIcon>
+                                <Icon>dashboard</Icon>
+                            </ListItemIcon>
+                            <ListItemText primary="Dashboard" />
+                        </ListItem>
+                        <ListItem button>
+                            <ListItemIcon>
+                                <Icon>shopping_cart</Icon>
+                            </ListItemIcon>
+                            <ListItemText primary="Orders" />
+                        </ListItem>
+                    </List>
+                </Drawer>
+                <main className={classes.content}>
+                    <div className={classes.appBarSpacer} />
+                    <Container maxWidth="lg" className={classes.container}>
+                        <Grid container spacing={3}>
+                            <Grid item xs={12}>
+                                <Paper className={classes.paper}>
+                                    <div ref={el => chartsEl = el}></div>
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                    </Container>
+                </main>
+            </div>
+        );
+    }
+
+    ReactDOM.render(
+        <App />,
+        document.getElementById('root')
+    );
+</script>
